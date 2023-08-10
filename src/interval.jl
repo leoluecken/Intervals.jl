@@ -301,12 +301,20 @@ end
 # https://github.com/invenia/Intervals.jl/issues/14), this breaks sort.
 Base.isless(a::AbstractInterval, b) = LeftEndpoint(a) < b
 Base.isless(a, b::AbstractInterval) = a < LeftEndpoint(b)
+islesseq(a::AbstractInterval, b) = LeftEndpoint(a) <= b
+islesseq(a, b::AbstractInterval) = a <= LeftEndpoint(b)
 
 less_than_disjoint(a::AbstractInterval, b) = RightEndpoint(a) < b
 less_than_disjoint(a, b::AbstractInterval) = a < LeftEndpoint(b)
+lesseq_than_disjoint(a::AbstractInterval, b) = RightEndpointType(a) == Closed ? RightEndpoint(a) < b : RightEndpoint(a) <= b 
+lesseq_than_disjoint(a, b::AbstractInterval) = LeftEndpointType(b) == Closed ? a < LeftEndpoint(b) : a <= LeftEndpoint(b) 
 
 function Base.:isless(a::AbstractInterval, b::AbstractInterval)
     return LeftEndpoint(a) < LeftEndpoint(b)
+end
+
+function islesseq(a::AbstractInterval, b::AbstractInterval)
+    return LeftEndpoint(a) <= LeftEndpoint(b)
 end
 
 function less_than_disjoint(a::AbstractInterval, b::AbstractInterval)
@@ -314,6 +322,12 @@ function less_than_disjoint(a::AbstractInterval, b::AbstractInterval)
 end
 
 greater_than_disjoint(a, b) = less_than_disjoint(b, a)
+greatereq_disjoint(a, b) = le_disjoint(b, a)
+
+Base.:(<=)(a, b::AbstractInterval) = islesseq(a, b)
+Base.:(<=)(a::AbstractInterval, b) = islesseq(a, b)
+Base.:(<=)(a::AbstractInterval, b::AbstractInterval) = islesseq(a, b)
+
 
 """
     ≪(a::AbstractInterval, b::AbstractInterval) -> Bool

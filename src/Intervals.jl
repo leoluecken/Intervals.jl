@@ -58,7 +58,9 @@ export Bound,
        union,
        union!,
        less_than_disjoint,
+       lesseq_than_disjoint,
        greater_than_disjoint,
+       greatereq_than_disjoint,
        superset,
        .., ≪, ≫, ⊆, ⊇, ⊈, ⊉
 end

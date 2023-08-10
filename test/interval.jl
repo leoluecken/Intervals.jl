@@ -345,17 +345,23 @@
                 @test !(interval ≪ cp)
                 @test !(interval > cp)
                 @test !(interval ≫ cp)
+                @test (interval <= cp)
+                @test (interval >= cp)
 
                 @test isless(interval, greater_val) || isinf(a)
                 @test interval < greater_val || isinf(a)
+                @test interval <= greater_val
                 @test !(interval ≪ greater_val)     # Still overlap, so not disjoint
                 @test !(interval > greater_val)
+                @test !(interval >= greater_val) || isinf(a)
                 @test !(interval ≫ greater_val)
 
                 @test !isless(greater_val, interval)
                 @test !(greater_val < interval)
+                @test !(greater_val <= interval) || isinf(a)
                 @test !(greater_val ≪ interval)     # Still overlap, so not disjoint
                 @test greater_val > interval || isinf(a)
+                @test greater_val >= interval
                 @test !(greater_val ≫ interval)     # Still overlap, so not disjoint
 
                 @test isless(lesser_val, interval) || isinf(a)
@@ -391,63 +397,84 @@
         # Comparisons between Interval{T} and T
         @test isless(5, Interval(10, 20))
         @test 5 < Interval(10, 20)
+        @test 5 <= Interval(10, 20)
         @test 5 ≪ Interval(10, 20)
         @test !(5 > Interval(10, 20))
+        @test !(5 >= Interval(10, 20))
         @test !(5 ≫ Interval(10, 20))
 
         @test isless(10, Interval{Open, Open}(10, 20))
         @test 10 < Interval{Open, Open}(10, 20)
+        @test 10 <= Interval{Open, Open}(10, 20)
         @test 10 ≪ Interval{Open, Open}(10, 20)
         @test !(10 > Interval{Open, Open}(10, 20))
+        @test !(10 >= Interval{Open, Open}(10, 20))
         @test !(10 ≫ Interval{Open, Open}(10, 20))
 
         @test !isless(10, Interval(10, 20))
         @test !(10 < Interval(10, 20))
+        @test 10 <= Interval(10, 20)
         @test !(10 ≪ Interval(10, 20))
         @test !(10 > Interval(10, 20))
+        @test 10 >= Interval(10, 20)
         @test !(10 ≫ Interval(10, 20))
 
         @test !isless(15, Interval(10, 20))
         @test !(15 < Interval(10, 20))
+        @test !(15 <= Interval(10, 20))
         @test !(15 ≪ Interval(10, 20))
         @test 15 > Interval(10, 20)
+        @test 15 >= Interval(10, 20)
         @test !(15 ≫ Interval(10, 20))
 
         @test !isless(20, Interval(10, 20))
         @test !(20 < Interval(10, 20))
+        @test !(20 <= Interval(10, 20))
         @test !(20 ≪ Interval(10, 20))
         @test 20 > Interval(10, 20)
+        @test 20 >= Interval(10, 20)
         @test !(20 ≫ Interval(10, 20))
 
         @test !isless(20, Interval{Open, Open}(10, 20))
         @test !(20 < Interval{Open, Open}(10, 20))
+        @test !(20 <= Interval{Open, Open}(10, 20))
         @test !(20 ≪ Interval{Open, Open}(10, 20))
         @test 20 > Interval{Open, Open}(10, 20)
+        @test 20 >= Interval{Open, Open}(10, 20)
         @test 20 ≫ Interval{Open, Open}(10, 20)
 
         @test !isless(25, Interval(10, 20))
         @test !(25 < Interval(10, 20))
+        @test !(25 <= Interval(10, 20))
         @test !(25 ≪ Interval(10, 20))
         @test 25 > Interval(10, 20)
+        @test 25 >= Interval(10, 20)
         @test 25 ≫ Interval(10, 20)
 
         @test !isless(Interval(10, 20), 5)
         @test !(Interval(10, 20) < 5)
+        @test !(Interval(10, 20) <= 5)
         @test !isless(Interval{Open, Open}(10, 20), 10)
         @test !(Interval{Open, Open}(10, 20) < 10)
+        @test !(Interval{Open, Open}(10, 20) <= 10)
         @test !isless(Interval(10, 20), 10)
         @test !(Interval(10, 20) < 10)
+        @test Interval(10, 20) <= 10
         @test !(Interval(10, 20) ≪ 10)
         @test isless(Interval(10, 20), 15)
         @test Interval(10, 20) < 15
+        @test Interval(10, 20) <= 15
         @test !(Interval(10, 20) ≪ 15)
         @test isless(Interval(10, 20), 20)
         @test Interval(10, 20) < 20
+        @test Interval(10, 20) <= 20
         @test !(Interval(10, 20) ≪ 20)
         @test isless(Interval{Open, Open}(10, 20), 20)
         @test Interval{Open, Open}(10, 20) < 20
+        @test Interval{Open, Open}(10, 20) <= 20
         @test isless(Interval(10, 20), 25)
         @test Interval(10, 20) < 25
+        @test Interval(10, 20) <= 25
 
         for lt in (isless, <)
             @test lt(Date(2013), Interval(Date(2014), Date(2016)))
